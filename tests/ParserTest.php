@@ -349,4 +349,19 @@ class ParserTest extends PHPUnit_Framework_TestCase
             array($values[0], $values[1])
         );
     }
+
+    public function testParsesStringAlreadyContainingCdataTags() {
+        $passed    = FALSE;
+        $xmlParser = new Parser();
+
+        $callback = function () use (&$passed) {
+            $passed  = TRUE;
+        };
+
+        $xmlParser->registerCallback('/General/', $callback);
+        $xmlParser->parse("<General><Country><![CDATA[Bulgaria ]]></Country></General>");
+
+        $this->assertTrue($passed);
+
+    }
 }
